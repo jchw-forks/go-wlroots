@@ -214,7 +214,11 @@ func (d Display) NewXDGShell(version int) XDGShell {
 func (d Display) XDGShellCreate(version int) XDGShell {
 	p := C.wlr_xdg_shell_create(d.p, C.uint(version))
 	man.track(unsafe.Pointer(p), &p.events.destroy)
-	return XDGShell{p: p}
+	xdgShell := XDGShell{p: p}
+	xdgShell.OnDestroy(func(XDGShell) {
+		man.delete(unsafe.Pointer(p))
+	})
+	return xdgShell
 }
 
 func (d Display) Destroy() {

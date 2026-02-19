@@ -35,8 +35,8 @@ func NewCursor() Cursor {
 }
 
 func (c Cursor) Destroy() {
-	C.wlr_cursor_destroy(c.p)
 	man.delete(unsafe.Pointer(c.p))
+	C.wlr_cursor_destroy(c.p)
 }
 
 func (c Cursor) X() float64 {

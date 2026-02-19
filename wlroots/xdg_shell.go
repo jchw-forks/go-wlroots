@@ -77,16 +77,19 @@ func (s XDGShell) OnNewSurface(cb func(XDGSurface)) {
 			man.delete(unsafe.Pointer(surface.p))
 			man.delete(unsafe.Pointer(surface.TopLevel().p))
 		})
-		man.add(unsafe.Pointer(surface.p.surface), &surface.p.surface.events.destroy, func(data unsafe.Pointer) {
-			man.delete(unsafe.Pointer(surface.p.surface))
-		})
+		man.track(unsafe.Pointer(surface.p.surface), &surface.p.surface.events.destroy)
 		cb(surface)
 	})
 }
 
 func (s XDGShell) OnNewTopLevel(cb func(XDGTopLevel)) {
 	man.add(unsafe.Pointer(s.p), &s.p.events.new_toplevel, func(data unsafe.Pointer) {
-		cb(XDGTopLevel{p: (*C.struct_wlr_xdg_toplevel)(data)})
+		xdgTopLevel := XDGTopLevel{p: (*C.struct_wlr_xdg_toplevel)(data)}
+		man.add(unsafe.Pointer(xdgTopLevel.p), &xdgTopLevel.p.events.destroy, func(data unsafe.Pointer) {
+			man.delete(unsafe.Pointer(xdgTopLevel.p))
+			man.delete(unsafe.Pointer(xdgTopLevel.Base().p))
+		})
+		cb(xdgTopLevel)
 	})
 }
 

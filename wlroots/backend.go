@@ -50,10 +50,7 @@ func (b Backend) OnNewOutput(cb func(Output)) {
 func (b Backend) OnNewInput(cb func(InputDevice)) {
 	man.add(unsafe.Pointer(b.p), &b.p.events.new_input, func(data unsafe.Pointer) {
 		dev := wrapInputDevice(data)
-		man.add(unsafe.Pointer(dev.p), &dev.p.events.destroy, func(data unsafe.Pointer) {
-			// delete the wlr_input_device
-			man.delete(unsafe.Pointer(dev.p))
-		})
+		man.track(unsafe.Pointer(dev.p), &dev.p.events.destroy)
 		cb(dev)
 	})
 }

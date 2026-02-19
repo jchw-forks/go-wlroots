@@ -39,9 +39,7 @@ func (x XWayland) OnNewSurface(cb func(XWaylandSurface)) {
 	man.add(unsafe.Pointer(x.p), &x.p.events.new_surface, func(data unsafe.Pointer) {
 		surface := XWaylandSurface{p: (*C.struct_wlr_xwayland_surface)(data)}
 		man.track(unsafe.Pointer(surface.p), &surface.p.events.destroy)
-		man.add(unsafe.Pointer(surface.p.surface), &surface.p.surface.events.destroy, func(data unsafe.Pointer) {
-			man.delete(unsafe.Pointer(surface.p.surface))
-		})
+		man.track(unsafe.Pointer(surface.p.surface), &surface.p.surface.events.destroy)
 		cb(surface)
 	})
 }
