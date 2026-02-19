@@ -19,7 +19,6 @@ import (
 // #include <wlr/types/wlr_xdg_shell.h>
 // #include <wlr/render/wlr_texture.h>
 // #include <wlr/types/wlr_linux_dmabuf_v1.h>
-// #include <wlr/types/wlr_matrix.h>
 // #include <wlr/util/box.h>
 // #include <wlr/util/edges.h>
 import "C"
@@ -96,14 +95,6 @@ func (l OutputLayout) Coords(output Output) (x float64, y float64) {
 }
 
 type Matrix [9]float32
-
-func (m *Matrix) ProjectBox(box *GeoBox, transform uint32, rotation float32, projection *Matrix) {
-	cm := m.toC()
-	b := box.toC()
-	pm := projection.toC()
-	C.wlr_matrix_project_box(&cm[0], &b, C.enum_wl_output_transform(transform), C.float(rotation), &pm[0])
-	m.fromC(&cm)
-}
 
 func (m *Matrix) toC() [9]C.float {
 	var cm [9]C.float
