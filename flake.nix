@@ -32,8 +32,8 @@
             pkgs.wayland
             pkgs.libGL
             pkgs.udev
-            pkgs.xorg.libX11
-            pkgs.xorg.xcbutilwm
+            pkgs.libx11
+            pkgs.libxcb-wm
           ];
           preBuild = ''
             wayland-scanner private-code ${pkgs.wayland-protocols}/share/wayland-protocols/stable/xdg-shell/xdg-shell.xml wlroots/xdg-shell-protocol.c
@@ -59,8 +59,8 @@
             pkgs.udev
             pkgs.libGL
             pkgs.pixman
-            pkgs.xorg.libX11
-            pkgs.xorg.xcbutilwm
+            pkgs.libx11
+            pkgs.libxcb-wm
           ];
         };
       }
