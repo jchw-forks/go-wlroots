@@ -11,7 +11,7 @@ import (
 	"unsafe"
 )
 
-// #cgo pkg-config: wlroots-0.18 wayland-server
+// #cgo pkg-config: wlroots-0.19 wayland-server
 // #cgo CFLAGS: -D_GNU_SOURCE -DWLR_USE_UNSTABLE
 // #include <wlr/types/wlr_xdg_shell.h>
 //
@@ -230,11 +230,8 @@ func (x XDGSurface) OnNewPopup(cb func(XDGSurface, XDGPopup)) {
 }
 
 func (x XDGSurface) Geometry() GeoBox {
-	var cb C.struct_wlr_box
-	C.wlr_xdg_surface_get_geometry(x.p, &cb)
-
 	var b GeoBox
-	b.fromC(&cb)
+	b.fromC(&x.p.geometry)
 	return b
 }
 

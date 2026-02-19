@@ -10,7 +10,7 @@ import (
 	"unsafe"
 )
 
-// #cgo pkg-config: wlroots-0.18 wayland-server
+// #cgo pkg-config: wlroots-0.19 wayland-server
 // #cgo CFLAGS: -D_GNU_SOURCE -DWLR_USE_UNSTABLE
 // #include <wlr/backend/wayland.h>
 // #include <wlr/types/wlr_output.h>
@@ -98,7 +98,7 @@ func (o Output) EffectiveResolution() (int, int) {
  * committed with. A NULL state indicates no change.
  */
 func (o Output) BeginRenderPass(state OutputState) (RenderPass, error) {
-	pass := C.wlr_output_begin_render_pass(o.p, state.p, nil, nil)
+	pass := C.wlr_output_begin_render_pass(o.p, state.p, nil)
 	if pass == nil {
 		return RenderPass{}, errors.New("can't begin render pass")
 	}
